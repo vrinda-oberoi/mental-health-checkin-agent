@@ -1,0 +1,271 @@
+{
+  "name": "Mental chat bot AI",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e54e71e6-097d-48cf-9fd9-47acd379aba9",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "chatId": "2067067306",
+        "text": "Hey! Just checking in ❤️ How are you feeling today?",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        20
+      ],
+      "id": "f9a7bae9-7c12-4fa3-a33d-1198cb38de02",
+      "name": "Telegram",
+      "webhookId": "b4b6106f-8528-47d3-9e33-fc9d44ad7e27",
+      "credentials": {
+        "telegramApi": {
+          "id": "BgLheiIfk1fCYezP",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        460,
+        40
+      ],
+      "id": "3e462eb7-1f3e-4115-bf0f-d42c2264e810",
+      "name": "Telegram Trigger",
+      "webhookId": "5214f27a-d2a1-4a7c-9a12-15d1a36f507a",
+      "credentials": {
+        "telegramApi": {
+          "id": "BgLheiIfk1fCYezP",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "=2067067306\n",
+        "text": "={{ $json.text }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        220
+      ],
+      "id": "b91478f8-2ccc-4275-9a85-90b4bc835410",
+      "name": "Telegram1",
+      "webhookId": "be9bb31f-80f8-4194-b222-597760d9c0e6",
+      "credentials": {
+        "telegramApi": {
+          "id": "BgLheiIfk1fCYezP",
+          "name": "Telegram account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        20,
+        360
+      ],
+      "id": "6c1a266f-43a6-4484-a93c-a917b18dadc5",
+      "name": "When chat message received",
+      "webhookId": "420890c8-f539-45a1-8044-487aa4bf3d22"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a friendly mental health assistant. Analyze the following message and respond with a gentle one-line emotional check-in:\n\n{{ $json[\"message\"][\"text\"] }}\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        320,
+        320
+      ],
+      "id": "c0286c75-b03d-43c5-b30a-027a9c206ed2",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "=mindcraft-gpt4o",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAzureOpenAi",
+      "typeVersion": 1,
+      "position": [
+        300,
+        540
+      ],
+      "id": "a2c4a51f-fd40-498b-8d19-8c00671ede58",
+      "name": "Azure OpenAI Chat Model",
+      "credentials": {
+        "azureOpenAiApi": {
+          "id": "8D2qsJwjBZy7q6FS",
+          "name": "Azure Open AI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 */2 * * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        1060,
+        80
+      ],
+      "id": "10613848-0b70-4e0d-8ef6-b979fe7118f3",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0fff771d-6e67-448d-9312-cb5fc69ff1fe",
+              "name": "text",
+              "value": "Hey! Just checking in 😊 How are you feeling this hour?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        80
+      ],
+      "id": "a1d36b34-290d-455e-8b46-36ea830b6f24",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Azure OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram1": {
+      "main": [
+        []
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1799d96b-78b6-405f-aef8-4c248db479d8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6d082a7f280f088309ddc3264328ff23f940c7cf0823d638faf98ac820a87ec6"
+  },
+  "id": "qux2ZjAUe7ALcugq",
+  "tags": []
+}
