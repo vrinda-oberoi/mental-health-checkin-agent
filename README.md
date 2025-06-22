@@ -3,23 +3,27 @@
 This is a no-code AI-powered mental health check-in agent built using **n8n**, **Telegram**, and **Azure OpenAI** (GPT). It automatically checks in with users, analyzes their emotional responses, and sends back kind, supportive replies.
 
 ---
+##🌟 Features
+🔁 Automated Emotional Check-Ins — Periodically checks in with users every hour to ask how they’re feeling
+📬 Inactivity Detection — Tracks when a user was last seen and follows up if they go silent for too long
+🧠 Memory-Driven Support — Stores user replies and timestamps in Google Sheets to build emotional context
+💬 Empathetic GPT Responses — Uses Azure OpenAI to send thoughtful, caring replies based on the user’s emotions
+📈 No-Code Architecture — Built entirely with n8n.io, no backend code required
+📊 Live Memory Log — All conversations are logged and can be viewed or analyzed via connected Sheets
+📥 Email & Telegram Support — Can work via multiple channels like Email, Telegram, and expandable to web UI
+🚀 UI-Ready — Easily integratable with front-end using n8n Webhooks for a future custom web interface
 
-## 💡 Features
 
-- 🔔 Sends automated check-in messages every 2 minutes via Telegram
-- 💬 Uses Azure OpenAI to analyze user emotions
-- 💛 Sends supportive replies like a digital wellness buddy
-- 🤖 100% No-Code — built entirely in [n8n.io](https://n8n.io)
-- 🛠️ Can be extended with Sheets, dashboards, or reminders
 
 ---
 
 ## ⚙️ Tech Stack
 
-- [n8n](https://n8n.io) – No-code workflow automation
-- Telegram Bot API – For user interaction
-- Azure OpenAI (GPT) – For mood detection and response
-- Cron (Custom) – For scheduling check-ins every 2 minutes
+🔧 **n8n** – No-code workflow automation  
+📊 **Google Sheets** – Memory for storing replies and timestamps  
+🧠 **Azure OpenAI (GPT)** – Emotional and empathetic AI replies  
+💬 **Telegram Bot API** – Messaging platform (v1)  
+⏱ **Cron (via n8n)** – Hourly check-in scheduler  
 
 ---
 
